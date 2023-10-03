@@ -1,4 +1,4 @@
-import {  StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Button from "../components/Button";
 import { useEffect, useState } from "react";
 import { UseFetch } from "../hooks/useFetch";
@@ -54,27 +54,30 @@ const HomeScreen = () => {
 		setEditedButtonIdx(null);
 		setsoundToEdit(null);
 	};
-
 	return (
 		<View style={styles.mainContainer}>
 			<View style={styles.headerContainer}>
 				<Text style={styles.header}>We Are Tech Home Task - Daniel Scwartz</Text>
 			</View>
 			<View style={styles.container}>
-				{data?.map((sound: Sound, idx) => {
-					if (idx < 8)
-						return (
-							<Button
-								openModal={openModal}
-								key={sound.soundId}
-								text={sound.title}
-								pressedColor={colorPalette[idx]}
-								bcg={sound.color}
-								soundData={sound.soundData}
-								idx={idx}
-							/>
-						);
-				})}
+				{data ? (
+					data.map((sound: Sound, idx) => {
+						if (idx < 8)
+							return (
+								<Button
+									openModal={openModal}
+									key={sound.soundId}
+									text={sound.title}
+									pressedColor={colorPalette[idx]}
+									bcg={sound.color}
+									soundData={sound.soundData}
+									idx={idx}
+								/>
+							);
+					})
+				) : (
+					<ActivityIndicator size="large" color="blue" style={styles.loader} />
+				)}
 			</View>
 			{isEditingButton && (
 				<CustomModal onSubmit={onSubmitModal} sound={soundToEdit} onClose={setIsEditingButton} />
@@ -86,6 +89,11 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+	loader: {
+		alignSelf: 'center',
+		position: 'absolute',
+		top:150
+	},
 	mainContainer: {
 		flex: 1,
 		backgroundColor: "#fff",
